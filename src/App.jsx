@@ -1,44 +1,47 @@
-import { useState } from "react";
-import { Card } from "./components/Card";
-
-const CardGrid = ({ cards }) => {
-  return (
-    <div className="flex justify-center flex-wrap gap-4 p-4">
-      {cards.map((card) => (
-        <Card key={card.id} imgSrc={card.image} suit={card.suit} value={card.value} />
-      ))}
-    </div>
-  );
-};
+import { use, useState } from "react";
+import { useEffect } from "react";
+import { useGame } from "./hooks/useGame";
+import { CardGrid } from "./components/CardGrid";
+import { ScoreUi } from "./components/ScoreUi";
+import { ErrorMessage } from "./components/ErrorMessage";
 function App() {
-  const [score, setScore] = useState(0);
-  const [maxscore, setMaxScore] = useState(0);
-  const cards = [
-    {
-      id: 1,
-      value: "10",
-      image: "https://deckofcardsapi.com/static/img/0H.png",
-      suit: "HEARTS",
-    },
-    {
-      id: 2,
-      value: "6",
-      image: "https://deckofcardsapi.com/static/img/6C.png",
-      suit: "CLUBS",
-    },
-    {
-      id: 3,
-      value: "9",
-      image: "https://deckofcardsapi.com/static/img/9D.png",
-      suit: "DIAMONDS",
-    },
-  ];
 
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      <CardGrid cards={cards} />
-    </div>
-  );
+ 
+  const { score, maxscore, gameLogic } = useGame();
+  const [cardsobj, setCardObj] = useState([]);
+  const [cardcount,setCardcount] = useState(8)
+  const [error,setErorr] = useState('')
+  useEffect(() => {
+    const fetchCard = async () => {
+      try {
+        if(cardcount > 24 || cardcount < 3)
+            return;
+        const response = await fetch(
+          `https://deckofcardsapi.com/api/deck/new/draw/?count=${cardcount}`,
+        );
+        if (!response.ok) throw new Error("Error while fetching");
+        const cards = await response.json();
+        console.log(cards);
+        if (cards) setCardObj(cards.cards);
+      } catch (error) {
+        console.log(error);
+        setErorr(error.message)
+      }
+    };
+    fetchCard()
+  }, [cardcount]);
+
+
+return (
+  <div className="min-h-screen bg-emerald-900 pb-12">
+    <ErrorMessage error={error}></ErrorMessage>
+    <ScoreUi setCardcount={setCardcount} setErorr={setErorr} cardcount={cardcount}  score={score} maxscore={maxscore}></ScoreUi>
+    <CardGrid
+      cards={cardsobj}
+      gameLogic={(id) => gameLogic(id, cardsobj, setCardObj)}
+    />
+  </div>
+);
 }
 
 export default App;
