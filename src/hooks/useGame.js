@@ -20,5 +20,5 @@ export function useGame() {
     shuffle(cardsObj, setCardsObj);
   }
 
-  return { score, maxscore, gameLogic };
+  return { score, maxscore, gameLogic,setScore };
 }

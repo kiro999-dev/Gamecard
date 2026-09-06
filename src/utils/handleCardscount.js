@@ -1,4 +1,4 @@
-export const handleCardscount = (value, setError, setCardcount) => {
+export const handleCardscount = (value, setError, setCardcount,setScore) => {
   const num = Number(value);
 
   if (value === '' || isNaN(num)) {
@@ -13,4 +13,5 @@ export const handleCardscount = (value, setError, setCardcount) => {
   }
   setError('');
   setCardcount(num);
+  setScore(0)
 };

@@ -6,6 +6,7 @@ export const ScoreUi = ({
   score,
   maxscore,
   cardcount,
+  setScore,
 }) => {
   return (
     <div>
@@ -33,7 +34,7 @@ export const ScoreUi = ({
             id="cardcount"
             value={cardcount}
             onChange={(e) =>
-              handleCardscount(e.target.value, setErorr, setCardcount)
+              handleCardscount(e.target.value, setErorr, setCardcount,setScore)
             }
             type="number"
             className={`placeholder:text-sm w-64 mt-2 px-4 py-2 rounded-lg ${
