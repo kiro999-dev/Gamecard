@@ -10,13 +10,13 @@ function App() {
  
   const { score, maxscore, gameLogic } = useGame();
   const [cardcount,setCardcount] = useState(8)
-  const { cardsobj, setCardObj, error, setErorr } = useCards(cardcount);
+  const { cardsobj, setCardObj, error, setError } = useCards(cardcount);
   
 
 return (
   <div className="min-h-screen bg-emerald-900 pb-12">
     <ErrorMessage error={error}></ErrorMessage>
-    <ScoreUi setCardcount={setCardcount} setErorr={setErorr} cardcount={cardcount}  score={score} maxscore={maxscore}></ScoreUi>
+    <ScoreUi setCardcount={setCardcount} setErorr={setError} cardcount={cardcount}  score={score} maxscore={maxscore}></ScoreUi>
     <CardGrid
       cards={cardsobj}
       gameLogic={(id) => gameLogic(id, cardsobj, setCardObj)}
